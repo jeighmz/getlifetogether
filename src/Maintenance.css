@@ -1,0 +1,16 @@
+.loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    background-color: white; /* Dark background */
+    color: #00d1b2; /* Neon color */
+    font-family: 'Orbitron', sans-serif; /* Futuristic font */
+  }
+  
+  .tron-text {
+    margin-top: 20px;
+    font-size: 20px;
+  }
