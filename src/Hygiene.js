@@ -54,6 +54,8 @@ const Hygiene = () => {
 
   const [tasks, setTasks] = useState(loadTasksFromLocalStorage());
   const [score, setScore] = useState(0);
+  const [currentCheckpointIndex, setCurrentCheckpointIndex] = useState(0); // Step 1: New state for tracking current checkpoint index
+
 
   // Function to clear tasks from local storage
   const clearTasksFromLocalStorage = () => {
@@ -108,6 +110,12 @@ const Hygiene = () => {
 
   const getCurrentHour = () => new Date().getHours();
   const getProgressPercentage = () => (score / totalPoints) * 100;
+  const showNextCheckpoint = () => {
+    setCurrentCheckpointIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      return nextIndex < tasks.length ? nextIndex : prevIndex; // Ensure the index does not exceed the number of checkpoints
+    });
+  };
 
   return (
     <div>
@@ -117,13 +125,14 @@ const Hygiene = () => {
         <div className="progress-bar" style={{ width: `${getProgressPercentage()}%` }}></div>
       </div>
       {tasks
-        .filter((checkpoint) => getCurrentHour() >= checkpoint.startHour)
+        .filter((checkpoint, index) => 
+          getCurrentHour() >= checkpoint.startHour || index <= currentCheckpointIndex) // Step 2: Update filter logic
         .map((checkpoint) => (
           <Checkpoint key={checkpoint.id} checkpoint={checkpoint} onToggle={toggleTaskCompletion} />
         ))}
-        <button onClick={clearTasksFromLocalStorage}>Clear Tasks</button>
+      <button onClick={clearTasksFromLocalStorage}>Clear Tasks</button>
+      <button onClick={showNextCheckpoint}>Next</button> {/* Step 4: Add "Next" button */}
     </div>
-    
   );
 };
 
